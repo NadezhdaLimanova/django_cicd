@@ -41,10 +41,8 @@ jobs:
         with:
           python-version: 3.9
 
-
       - name: Установка зависимостей
         run: pip install -r requirements.txt
-
 
       - name: Линтинг
         run: flake8 logistic/ --exclude logistic/migrations
@@ -61,3 +59,11 @@ jobs:
           DB_PASSWORD: ${{ env.DB_PASSWORD }}
           DB_HOST: ${{ env.DB_HOST }}
           DB_PORT: ${{ env.DB_PORT }}
+
+      - name: Деплой
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: expect /home/nadezhda/django_cicd/deploy.exp
